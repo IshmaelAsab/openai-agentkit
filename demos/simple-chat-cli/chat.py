@@ -3,7 +3,7 @@
 Simple Chat CLI - A pedagogical introduction to OpenAI's Responses and Conversations APIs
 
 This CLI demonstrates:
-1. Chat agent built on the Conversations API (persistent state)
+1. Chat agent built on the Conversations/Responses API (persistent state)
 2. File references with @ completion
 3. Tool calling via the Responses API
 4. Token counting and usage tracking
@@ -16,6 +16,7 @@ from pathlib import Path
 from typing import Optional, List
 
 from openai import OpenAI
+# Packages for the Chat CLI interface
 from prompt_toolkit import PromptSession
 from prompt_toolkit.completion import PathCompleter, Completer, Completion, WordCompleter
 from prompt_toolkit.formatted_text import HTML
@@ -25,6 +26,7 @@ from rich.markdown import Markdown
 from rich.panel import Panel
 from rich.text import Text
 from dotenv import load_dotenv
+
 from tools import create_file, move_file, edit_file, FILE_TOOL_DEFINITIONS
 
 
@@ -43,7 +45,7 @@ TOOL_HANDLERS = {
     "edit_file": edit_file,
 }
 
-
+# boilerplate code for the Chat CLI interface you can just copy
 class ChatCompleter(Completer):
     """
     Custom completer that handles both:
@@ -116,11 +118,11 @@ class ChatCompleter(Completer):
                         display_meta=completion.display_meta,
                     )
 
-
+# This is the main class that manages the chat session
 class ChatSession:
     """Manages a chat session using OpenAI's APIs"""
 
-    def __init__(self, model: str = "gpt-5-mini"):
+    def __init__(self, model: str = "gpt-5"):
         self.model = model
         self.conversation_id: Optional[str] = None
         self.total_input_tokens = 0

@@ -1,5 +1,5 @@
-import Script from "next/script";
 import type { Metadata } from "next";
+import { ChatKitScripts } from "@/components/ChatKitScripts";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -14,18 +14,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <head>
-        {/* Load crypto polyfill before ChatKit to ensure compatibility */}
-        <Script
-          src="/crypto-polyfill.js"
-          strategy="beforeInteractive"
-        />
-        <Script
-          src="https://cdn.platform.openai.com/deployments/chatkit/chatkit.js"
-          strategy="beforeInteractive"
-        />
-      </head>
-      <body className="antialiased">{children}</body>
+      <body className="antialiased">
+        <ChatKitScripts />
+        {children}
+      </body>
     </html>
   );
 }
