@@ -1,38 +1,38 @@
 # Simple Chat CLI
 
-A pedagogical command-line chat interface that introduces OpenAI's **Responses API** and **Conversations API** in an interactive, hands-on way.
+A pedagogical, single-mode chat agent that introduces OpenAI's Conversations/Responses APIs in a hands-on way. It keeps one ongoing conversation, can call local tools, and can optionally search the web when it needs fresh information.
 
 ## What You'll Learn
 
-This CLI demonstrates the fundamental building blocks of OpenAI's agent platform:
+This CLI demonstrates the essential building blocks of an OpenAI-powered agent:
 
-1. **Responses API** - The core primitive for generating model responses (stateless)
-2. **Conversations API** - Persistent conversation state management (stateful)
-3. **File context injection** - How to provide documents as input to models (using @ syntax)
-4. **Web search tool** - Built-in web search capability for current information
-5. **Token counting** - Understanding and tracking API usage
+1. Chat agent on the Conversations API (persistent state across turns)
+2. Tool calling via the Responses API (function calls + web search)
+3. File context injection using the `@` syntax
+4. Token counting and session statistics
+5. Local file utilities the model can call (create/move/edit files)
 
 ## Prerequisites
 
 - Python 3.8+
-- OpenAI API key ([get one here](https://platform.openai.com/api-keys))
+- OpenAI API key (get one at https://platform.openai.com/api-keys)
 
 ## Installation
 
-1. **Navigate to this directory:**
+1. Navigate to this directory:
    ```bash
    cd demos/simple-chat-cli
    ```
 
-2. **Install dependencies:**
+2. Install dependencies:
    ```bash
    pip install -r requirements.txt
    ```
 
-3. **Set up your API key:**
+3. Set up your API key:
    ```bash
    cp .env.example .env
-   # Edit .env and add your OpenAI API key
+   # Edit .env and add your OPENAI_API_KEY
    ```
 
 ## Usage
@@ -43,70 +43,38 @@ Run the chat application:
 python chat.py
 ```
 
-## Two Operating Modes
-
-### 1. Responses API Mode (Default)
-
-**Stateless** - Each message is independent.
+You will see a single prompt for the chat agent. All turns share context automatically.
 
 ```
-[responses]> What is the capital of France?
+[chat-agent]> Hello!
 ```
-
-**Use cases:**
-- One-off questions
-- Independent queries
-- Simple request-response patterns
-
-**Switch to this mode:** `/responses`
-
-### 2. Conversations API Mode
-
-**Stateful** - Full conversation history is maintained.
-
-```
-[conversation]> What is the capital of France?
-[conversation]> What is its population?
-```
-
-The second question automatically has context from the first!
-
-**Use cases:**
-- Multi-turn conversations
-- Context-dependent interactions
-- Building chatbots with memory
-
-**Switch to this mode:** `/conversation`
 
 ## Commands
 
-All commands start with `/`. **Press TAB after typing `/` to see available commands with descriptions!**
+All commands start with `/`. Press TAB after typing `/` to see available commands.
 
 | Command | Description |
 |---------|-------------|
 | `/help` | Show help message |
-| `/responses` | Switch to Responses API mode (stateless) |
-| `/conversation` | Switch to Conversations API mode (stateful) |
 | `/history` | View full conversation history |
 | `/stats` | Show token usage and session statistics |
-| `/websearch` | Toggle web search on/off (enabled by default) |
 | `/new` | Start a new conversation |
+| `/websearch` | Toggle web search on/off (enabled by default) |
+| `/tools` | List the currently available tools |
 | `/clear` | Clear the screen |
 | `/exit` or `/quit` | Exit the application |
 
 ## Web Search
 
-The model can automatically search the web when it needs current information!
+The model can automatically search the web when it needs current information.
 
-**How it works:**
-- Enabled by default
-- Model autonomously decides when to search
+- Enabled by default (toggle with `/websearch`)
+- The model decides when to search
 - Sources are displayed when used
-- Perfect for current events, recent updates, or factual information
 
-**Example:**
+Example:
 ```
-[responses]> What are the latest developments in AI this week?
+[chat-agent]> What are the latest developments in AI this week?
 
 🔍 Web Sources Used:
   1. Latest AI News - TechCrunch
@@ -117,25 +85,51 @@ The model can automatically search the web when it needs current information!
 
 ## File References (@ syntax)
 
-You can include file contents in your prompts using `@`:
+Include file contents in your prompts using `@`:
 
 ```
-[responses]> Summarize @README.md
-[responses]> Analyze @/absolute/path/to/file.py
-[conversation]> What are the main points in @docs/intro.txt?
+[chat-agent]> Summarize @README.md
+[chat-agent]> Analyze @/absolute/path/to/file.py
+[chat-agent]> What are the main points in @docs/intro.txt?
 ```
 
-**Features:**
-- **Tab completion** - Press TAB after typing `@` to complete file paths
-- Supports relative paths (`@file.txt`, `@../dir/file.md`)
-- Supports absolute paths (`@/usr/local/config.json`)
+Features:
+- Tab completion after `@` to complete file paths
+- Relative paths (`@file.txt`, `@../dir/file.md`)
+- Absolute paths (`@/usr/local/config.json`)
 - Home directory expansion (`@~/Documents/notes.txt`)
+
+## Tools the Agent Can Call
+
+The agent can call local file utilities, and (when enabled) the built-in web search tool. Use `/tools` to see what is currently available.
+
+- File utilities: `create_file`, `move_file`, `edit_file`
+- Web search: built-in tool, toggle with `/websearch`
+
+## Session Statistics
+
+Use `/stats` to view token usage and session information (input tokens, output tokens, totals, and the current conversation ID).
 
 ## Example Sessions
 
-### Example 1: Stateless Responses
+### Example: Stateful Chat Agent
 
-```bash
-# Start in responses mode (stateless - default)
-[responses]> What are the three laws of thermodynamics?
-Using Responses API (stateless)
+```
+# Start chatting (stateful)
+[chat-agent]> What is the capital of France?
+Assistant: Paris is the capital of France.
+
+[chat-agent]> What is its population?
+Assistant: The population of Paris proper is about 2.1M; the metro area is much larger. (The model may search the web for current figures if needed.)
+```
+
+### Example: Using a File Reference
+
+```
+[chat-agent]> Please summarize @README.md
+Assistant: <summary of this file>
+```
+
+---
+
+This project is intentionally minimal to highlight the core patterns: a single, stateful chat agent that can read files you reference, call local tools, and optionally search the web when it needs fresh facts.
