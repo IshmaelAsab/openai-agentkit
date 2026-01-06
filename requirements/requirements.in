@@ -3,3 +3,5 @@ openai
 matplotlib
 seaborn
 pypdf
+requests
+tiktoken

@@ -17,7 +17,7 @@ repo-setup:
 	echo "ipykernel" > requirements/requirements.in
 
 notebook-setup:
-	uv run ipython kernel install --user --env VIRTUAL_ENV $(PWD)/$(VENV_PATH) --name=$(ENV_NAME)
+	$(VENV_PATH)/bin/python -m ipykernel install --user --name=$(ENV_NAME) --display-name="$(ENV_NAME)"
 
 env-update:
 	uv pip compile ./requirements/requirements.in -o ./requirements/requirements.txt

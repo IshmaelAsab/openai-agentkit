@@ -122,7 +122,7 @@ class ChatCompleter(Completer):
 class ChatSession:
     """Manages a chat session using OpenAI's APIs"""
 
-    def __init__(self, model: str = "gpt-5"):
+    def __init__(self, model: str = "gpt-5.2"):
         self.model = model
         self.conversation_id: Optional[str] = None
         self.total_input_tokens = 0
