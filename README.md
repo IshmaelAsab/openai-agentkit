@@ -1,4 +1,4 @@
-# O'Reilly Live Training - OpenAI AgentKit
+# OpenAI AgentKit
 
 Welcome to the O'Reilly Live Training on OpenAI AgentKit! This course will guide you through building AI agents using OpenAI's latest APIs, including structured outputs, file search, and multi-modal capabilities.
 
